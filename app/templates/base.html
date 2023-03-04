@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link type="text/css" href="{{url_for('static', filename='style.css') }}" rel="stylesheet">
+    <title>Simple Chat</title>
+</head>
+<body>
+<div>
+    <div class="logo">
+        <img src="#">
+    </div>
+    <form action="" method="get">
+        <input name="s" placeholder="Search here..." type="search">
+        <button type="submit">Go!</button>
+    </form>
+    <a href="#" class="login-button">Login</a>
+    <a href="#" class="messages-button">Messages 0</a>
+    <a href="#" class="profile-button">Profile</a>
+</div>
+
+{% block content %}
+{% endblock %}
+</body>
+</html>
