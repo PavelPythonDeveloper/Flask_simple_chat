@@ -14,11 +14,20 @@
         <input name="s" placeholder="Search here..." type="search">
         <button type="submit">Go!</button>
     </form>
-    <a href="#" class="login-button">Login</a>
+    <a href="{{ url_for('login') }}" class="login-button">Login</a>
     <a href="#" class="messages-button">Messages 0</a>
     <a href="#" class="profile-button">Profile</a>
 </div>
-
+<hr>
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<ul>
+        {% for message in messages %}
+        <li> {{ message }}</li>
+        {% endfor %}
+</ul>
+{% endif %}
+{% endwith %}
 {% block content %}
 {% endblock %}
 </body>
