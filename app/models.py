@@ -1,6 +1,7 @@
 from app import db, login
 from datetime import datetime
 from flask_login import UserMixin
+from werkzeug.security import check_password_hash, generate_password_hash
 
 
 @login.user_loader
@@ -13,6 +14,13 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(128), index=True, unique=True)
     email = db.Column(db.String(128), index=True, unique=True)
     phone = db.Column(db.String)
+    password_hash = db.Column(db.String())
+
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password=password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
 
     def __repr__(self):
         return f'User(id={self.id}, username={self.username})'
