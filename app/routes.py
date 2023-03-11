@@ -23,11 +23,11 @@ def login():
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
-        flash(f'you have been registered as {form.username.data}')
         user = User()
         user.username = form.username.data
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
+        flash('You have been registered!!!')
         return redirect(url_for('index'))
     return render_template('register.html', form=form)
