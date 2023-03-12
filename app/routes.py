@@ -1,8 +1,13 @@
 from app import app, db
 from flask import render_template, url_for, flash, redirect
 from app.forms import LoginForm, RegistrationForm
-from flask_login import current_user, login_user
+from flask_login import current_user, login_user, logout_user
 from app.models import User
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
 
 @app.route('/')
 @app.route('/index')
@@ -17,6 +22,7 @@ def login():
         user = User.query.filter_by(username=form.username.data).first()
         if user is None or not user.check_password(form.password.data):
             flash('Invalid username!')
+            return redirect(url_for('index'))
         login_user(user, remember=form.remember_me.data)
         flash('You have been logged in')
         return redirect(url_for('index'))
