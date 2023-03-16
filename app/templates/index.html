@@ -4,6 +4,9 @@
 <div>
     {% if current_user.is_authenticated %}
         <h1> Welcome to Simple Chat, {{ current_user.username }}!</h1>
+        <div id="chat-holder" style="width: 500px; height: 400px; border: 1px rgb(0, 0, 0) solid" >
+
+        </div>
     {% else %}
         <h1>Welcome to Simple Chat!</h1>
     <div>
