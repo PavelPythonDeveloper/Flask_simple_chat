@@ -17,14 +17,14 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String())
 
     messages_sent = db.relationship('Message',
-                                    fogeign_keys='Message.sender_id',
+                                    foreign_keys='Message.sender_id',
                                     backref='author',
                                     lazy='dynamic')
 
-    message_received = db.relationship('Message',
-                                       fogeign_keys='Message.recipient_id',
-                                       backref='recipient',
-                                       lazy='dynamic')
+    messages_received = db.relationship('Message',
+                                        foreign_keys='Message.recipient_id',
+                                        backref='recipient',
+                                        lazy='dynamic')
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password=password)
