@@ -19,6 +19,9 @@ class Chat(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     messages = db.relationship('Message', backref='chat', lazy='dynamic')
 
+    def __repr__(self):
+        return f'Chat(id={self.id}, users={self.users})'
+
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
