@@ -20,7 +20,7 @@ class Chat(db.Model):
     messages = db.relationship('Message', backref='chat', lazy='dynamic')
 
     def __repr__(self):
-        return f'Chat(id={self.id}, users={self.users})'
+        return f'Chat(id={self.id}, users={self.users}, messages_id={[message.id for message in self.messages]})'
 
 
 class User(UserMixin, db.Model):
