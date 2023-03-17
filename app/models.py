@@ -9,6 +9,12 @@ def load_user(id):
     return User.query.get(int(id))
 
 
+chat_user = db.Table('chat_user',
+                     db.Column('chat_id', db.Integer(), db.ForeignKey('chat.id')),
+                     db.Column('user_id', db.Integer(), db.ForeignKey('user.id'))
+                     )
+
+
 class Chat(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     messages = db.relationship('Message', backref='chat', lazy='dynamic')

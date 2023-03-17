@@ -33,4 +33,24 @@
 {% block content %}
 {% endblock %}
 </body>
+<script>
+function get_json(){
+    let request = new XMLHttpRequest();
+    var params = 'userId=' + encodeURIComponent({{current_user.id}});
+    request.open("GET", "/_get_json?" + params, true);
+    request.send();
+    request.onload = function() {
+        if (request.status != 200) {
+            alert(`Ошибка ${request.status}: ${request.statusText}`);
+            } else {
+                let div = document.createElement('div');
+                div.className = "alert";
+                div.innerHTML = JSON.parse(request.response).messages;
+                document.querySelector('#chat-holder').append(div);
+                }
+            }
+        }
+
+    let timerId = setInterval(() => get_json(), 12000);
+</script>
 </html>
