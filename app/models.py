@@ -26,8 +26,6 @@ class Chat(db.Model):
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(128), index=True, unique=True)
-    email = db.Column(db.String(128), index=True, unique=True)
-    phone = db.Column(db.String)
     password_hash = db.Column(db.String())
 
     messages_sent = db.relationship('Message',
