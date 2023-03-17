@@ -53,3 +53,6 @@ def get_json():
     messages = list(map(lambda x: x.body, messages))
 
     return jsonify({'messages': messages})
+
+
+

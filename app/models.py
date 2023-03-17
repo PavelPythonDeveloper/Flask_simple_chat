@@ -55,6 +55,7 @@ class Message(db.Model):
     recipient_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     body = db.Column(db.String())
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    chat_id = db.Column(db.Integer(), db.ForeignKey('chat.id'))
 
     def __repr__(self):
         return f"Message(id={self.id}, " \
