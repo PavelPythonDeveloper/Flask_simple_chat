@@ -37,6 +37,8 @@ class User(UserMixin, db.Model):
                                         backref='recipient',
                                         lazy='dynamic')
 
+    chats = db.relationship('Chat', secondary=chat_user, backref='users')
+
     def set_password(self, password):
         self.password_hash = generate_password_hash(password=password)
 
