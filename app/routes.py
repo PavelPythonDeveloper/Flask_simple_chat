@@ -48,11 +48,9 @@ def register():
 @app.route('/_get_json')
 def get_json():
     id = request.args.get('userId', 0, type=int)
-    print(id)
-    messages = Message.query.filter_by(sender_id=id)
-    messages = list(map(lambda x: x.body, messages))
-
-    return jsonify({'messages': messages})
-
-
-
+    user = User.query.filter_by(id=id).first()
+    response = {}
+    for chat in user.chats:
+        username = [user.username for user in chat.users if user != current_user][0]
+        response.update({f"chat_{str(chat.id)}": {"users": {"username": username}}})
+    return jsonify(response)
