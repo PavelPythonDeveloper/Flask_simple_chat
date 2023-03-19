@@ -43,14 +43,21 @@ function get_json(){
         if (request.status != 200) {
             alert(`Ошибка ${request.status}: ${request.statusText}`);
             } else {
-                let div = document.createElement('div');
-                div.className = "alert";
-                div.innerHTML = JSON.parse(request.response).messages;
-                document.querySelector('#chat-holder').append(div);
+                document.querySelectorAll(".chat").forEach(el => el.remove());
+                let response = JSON.parse(request.response);
+                for (var key in response) {
+                    let div = document.createElement('div');
+                    div.className = "chat";
+                    div.id = key;
+                    let chatName = key;
+                    let userName = response[key].users.username
+                    div.innerHTML = chatName + " " + userName;
+                    document.querySelector('#chat-holder').append(div);
+                    }
                 }
             }
         }
 
-    let timerId = setInterval(() => get_json(), 12000);
+    let timerId = setInterval(() => get_json(), 4000);
 </script>
 </html>
