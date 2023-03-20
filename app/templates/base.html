@@ -16,7 +16,7 @@
     </form>
     {% if current_user.is_authenticated %}
     <a href="{{ url_for('logout') }}" class="login-button">Logout</a>
-    <a href="#" class="messages-button">Messages 0</a>
+    <a href="#" class="messages-button">Messages <span id="message-counter"></span></a>
     <a href="#" class="profile-button">Profile</a>
     {% endif %}
 </div>
@@ -34,6 +34,11 @@
 {% endblock %}
 </body>
 <script>
+function setMessageCounter(count){
+    let messageCounter = document.querySelector("#message-counter");
+    messageCounter.innerHTML = count;
+};
+
 function get_json(){
     let request = new XMLHttpRequest();
     var params = 'userId=' + encodeURIComponent({{current_user.id}});
@@ -41,7 +46,7 @@ function get_json(){
     request.send();
     request.onload = function() {
         if (request.status != 200) {
-            alert(`Ошибка ${request.status}: ${request.statusText}`);
+            alert(`Error ${request.status}: ${request.statusText}`);
             } else {
                 document.querySelectorAll(".chat").forEach(el => el.remove());
                 let response = JSON.parse(request.response);
@@ -51,13 +56,15 @@ function get_json(){
                     div.id = key;
                     let chatName = key;
                     let userName = response[key].users.username
-                    div.innerHTML = chatName + " " + userName;
+                    let lastMessage = response[key].last_message
+                    div.innerHTML = chatName + " " + userName + " " + lastMessage;
                     document.querySelector('#chat-holder').append(div);
-                    }
-                }
-            }
-        }
+                    };
+                setMessageCounter(6)
+                };
+            };
+        };
 
-    let timerId = setInterval(() => get_json(), 4000);
+let timerId = setInterval(() => get_json(), 3000);
 </script>
 </html>
