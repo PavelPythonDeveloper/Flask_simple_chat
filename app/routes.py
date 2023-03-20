@@ -46,7 +46,7 @@ def register():
 
 
 @app.route('/_get_json')
-def get_json():
+def get_chats():
     id = request.args.get('userId', 0, type=int)
     user = User.query.filter_by(id=id).first()
     response = {}
