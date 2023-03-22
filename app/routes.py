@@ -45,7 +45,7 @@ def register():
     return render_template('register.html', form=form)
 
 
-@app.route('/_get_json')
+@app.route('/_get_chats')
 def get_chats():
     id = request.args.get('userId', 0, type=int)
     user = User.query.filter_by(id=id).first()
@@ -54,5 +54,5 @@ def get_chats():
         username = [user.username for user in chat.users if user != current_user][0]
         last_message = sorted(chat.messages, key=lambda x: x.timestamp)[-1].body
         response.update({f"chat_{str(chat.id)}": {"users": {"username": username}, "last_message": last_message}})
-        print(response)
+    print(response)
     return jsonify(response)

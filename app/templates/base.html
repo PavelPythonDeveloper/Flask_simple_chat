@@ -59,12 +59,31 @@ function get_chats(){
                     let lastMessage = response[key].last_message
                     div.innerHTML = chatName + " " + userName + " " + lastMessage;
                     document.querySelector('#chat-holder').append(div);
-                    };
-                setMessageCounter(6)
-                };
-            };
-        };
 
-let timerId = setInterval(() => get_chats(), 3000);
+                    }
+                    const chats = document.getElementsByClassName("chat");
+
+                    const chatSelected = e => {
+                        console.log(e.target.id);
+                        let divMessages = document.createElement('div');
+                        divMessages.className = "message";
+                        divMessages.innerHTML = 'New Message!';
+                        document.querySelector('#message-holder').append(divMessages);
+                    }
+
+                    for (let chat of chats) {
+                        console.log(chat.id);
+                        chat.addEventListener("click", chatSelected);
+                        }
+
+                setMessageCounter(6)
+                }
+            }
+        }
+get_chats();
+let timerId = setInterval(() => get_chats(), 4000);
+
+
+<!--если будут добавляться новые чаты, скорее всего они не добавятся в обработчик EventListner!!!-->
 </script>
 </html>
