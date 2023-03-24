@@ -2,7 +2,7 @@ from app import app, db
 from flask import render_template, url_for, flash, redirect, jsonify, request
 from app.forms import LoginForm, RegistrationForm
 from flask_login import current_user, login_user, logout_user
-from app.models import User, Message
+from app.models import User, Message, Chat
 
 
 @app.route('/logout')
@@ -54,5 +54,22 @@ def get_chats():
         username = [user.username for user in chat.users if user != current_user][0]
         last_message = sorted(chat.messages, key=lambda x: x.timestamp)[-1].body
         response.update({f"chat_{str(chat.id)}": {"users": {"username": username}, "last_message": last_message}})
+    print(response)
+    return jsonify(response)
+
+
+@app.route('/_get_chat_messages')
+def get_chat_messages():
+    id = request.args.get("chat_Id", 0, type=str)
+    id = int(id[-1])
+    chat = Chat.query.filter_by(id=id).first()
+    messages = chat.messages
+    for message in messages:
+        print(message)
+    response = {}
+    for num, message in enumerate(messages):
+        response.update({f'message_{str(num)}': {'body': message.body,
+                                            'timestamp': message.timestamp,
+                                            'user': 'current_user' if message.author == current_user else 'recipient'}})
     print(response)
     return jsonify(response)
