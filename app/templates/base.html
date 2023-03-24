@@ -39,36 +39,58 @@ function setMessageCounter(count){
     messageCounter.innerHTML = count;
 };
 
-function get_chats(){
+function get_chats()
+{
     let request = new XMLHttpRequest();
     var params = 'userId=' + encodeURIComponent({{current_user.id}});
     request.open("GET", "/_get_chats?" + params, true);
     request.send();
-    request.onload = function() {
-        if (request.status != 200) {
+    request.onload = function()
+	{
+        if (request.status != 200)
+		{
             alert(`Error ${request.status}: ${request.statusText}`);
-            } else {
-                document.querySelectorAll(".chat").forEach(el => el.remove());
-                let response = JSON.parse(request.response);
-                for (var key in response) {
-                    let div = document.createElement('div');
-                    div.className = "chat";
-                    div.id = key;
-                    let chatName = key;
-                    let userName = response[key].users.username
-                    let lastMessage = response[key].last_message
-                    div.innerHTML = chatName + " " + userName + " " + lastMessage;
-                    document.querySelector('#chat-holder').append(div);
+        } else
+				{
+					document.querySelectorAll(".chat").forEach(el => el.remove());
+					let response = JSON.parse(request.response);
+					for (var key in response)
+						{
+							let div = document.createElement('div');
+							div.className = "chat";
+							div.id = key;
+							let chatName = key;
+							let userName = response[key].users.username
+							let lastMessage = response[key].last_message
+							div.innerHTML = chatName + " " + userName + " " + lastMessage;
+							document.querySelector('#chat-holder').append(div);
 
-                    }
+						}
+				}
                     const chats = document.getElementsByClassName("chat");
 
                     const chatSelected = e => {
+                        document.querySelectorAll(".message").forEach(el => el.remove());
                         console.log(e.target.id);
-                        let divMessages = document.createElement('div');
-                        divMessages.className = "message";
-                        divMessages.innerHTML = 'New Message!';
-                        document.querySelector('#message-holder').append(divMessages);
+
+                        let requestMessage = new XMLHttpRequest();
+                        var params = 'chat_Id=' + encodeURIComponent(e.target.id);
+                        requestMessage.open("GET", "/_get_chat_messages?" + params, true);
+                        requestMessage.send();
+                        requestMessage.onload = function()
+                        {
+                            let response = JSON.parse(requestMessage.response);
+                            console.log(response);
+                            let k = 0;
+                            for (let key in response)
+                            {
+                                let divMessages = document.createElement('div');
+                                divMessages.className = "message";
+                                text = response[key].body;
+                                divMessages.innerHTML = text;
+                                document.querySelector('#message-holder').append(divMessages);
+                            }
+                        }
                     }
 
                     for (let chat of chats) {
@@ -77,13 +99,10 @@ function get_chats(){
                         }
 
                 setMessageCounter(6)
-                }
-            }
-        }
+    }
+
+}
 get_chats();
 let timerId = setInterval(() => get_chats(), 4000);
-
-
-<!--если будут добавляться новые чаты, скорее всего они не добавятся в обработчик EventListner!!!-->
 </script>
 </html>
