@@ -84,11 +84,11 @@ function get_chats()
                             let k = 0;
                             for (let key in response)
                             {
-                                let divMessages = document.createElement('div');
-                                divMessages.className = "message";
+                                let divMessage = document.createElement('div');
+                                divMessage.className = "message";
                                 text = response[key].body;
-                                divMessages.innerHTML = text;
-                                document.querySelector('#message-holder').append(divMessages);
+                                divMessage.innerHTML = text;
+                                document.querySelector('#message-holder').append(divMessage);
                             }
                         }
                     }
