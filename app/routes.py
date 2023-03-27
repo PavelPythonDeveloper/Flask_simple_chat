@@ -54,7 +54,7 @@ def get_chats():
         username = [user.username for user in chat.users if user != current_user][0]
         last_message = sorted(chat.messages, key=lambda x: x.timestamp)[-1].body
         response.update({f"chat_{str(chat.id)}": {"users": {"username": username}, "last_message": last_message}})
-    print(response)
+    # print(response)
     return jsonify(response)
 
 
@@ -65,11 +65,34 @@ def get_chat_messages():
     chat = Chat.query.filter_by(id=id).first()
     messages = chat.messages
     for message in messages:
-        print(message)
+        # print(message)
+        pass
     response = {}
     for num, message in enumerate(messages):
         response.update({f'message_{str(num)}': {'body': message.body,
-                                            'timestamp': message.timestamp,
-                                            'user': 'current_user' if message.author == current_user else 'recipient'}})
-    print(response)
+                                                 'timestamp': message.timestamp,
+                                                 'user': 'current_user' if message.author == current_user else 'recipient'}})
+    # print(response)
     return jsonify(response)
+
+
+@app.route('/send_message', methods=['POST'])
+def send_message():
+    body = request.args.get('body', 0, type=str)
+    chat_id = request.args.get('chat_Id', 0, type=str)
+    print(body)
+    print(chat_id)
+    chat = Chat.query.get(int(chat_id[-1]))
+    print('chat', chat)
+    if chat is not None:
+        message = Message(sender_id=current_user.id,
+                          recipient_id=chat.users[0].id if chat.users[0] != current_user else chat.users[1].id,
+                          body=body,
+                          chat_id=chat.id)
+        db.session.add(message)
+        chat.messages.append(message)
+
+        db.session.commit()
+    else:
+        pass
+    return jsonify('200')
