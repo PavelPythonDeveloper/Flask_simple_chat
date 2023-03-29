@@ -52,9 +52,12 @@ def get_chats():
     response = {}
     for chat in user.chats:
         username = [user.username for user in chat.users if user != current_user][0]
-        last_message = sorted(chat.messages, key=lambda x: x.timestamp)[-1].body
-        response.update({f"chat_{str(chat.id)}": {"users": {"username": username}, "last_message": last_message}})
-    # print(response)
+        last_message = sorted(chat.messages, key=lambda x: x.timestamp)[-1]
+        response.update({f"chat_{str(chat.id)}": {"users": {"username": username},
+                                                  "last_message": last_message.body,
+                                                  "last_message_timestamp": last_message.timestamp}
+                         })
+    print(response)
     return jsonify(response)
 
 
