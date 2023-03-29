@@ -19,14 +19,13 @@ function responseSort(res) {
 
 function refreshMessages()
 {
-    clear('send-message');
-    document.querySelectorAll(".message").forEach(el => el.remove());
     let requestMessage = new XMLHttpRequest();
     var params = 'chat_Id=' + encodeURIComponent(selectedChatId);
     requestMessage.open("GET", "/_get_chat_messages?" + params, true);
     requestMessage.send();
     requestMessage.onload = function()
         {
+            document.querySelectorAll(".message").forEach(el => el.remove());
             let response = JSON.parse(requestMessage.response);
             let responseArray = responseSort(response);
 
@@ -49,12 +48,14 @@ function setMessageCounter(count){
 
 function sendButtonPressed()
     {
+
         console.log('Button pressed!');
         body = document.getElementById('send-message').value
         let req = new XMLHttpRequest();
         var params = 'body=' + encodeURIComponent(body) + '&' + 'chat_Id=' + encodeURIComponent(selectedChatId);
         req.open("POST", "/send_message?" + params, true);
         req.send();
+        clear('send-message');
         req.onload = refreshMessages;
     }
 
@@ -89,10 +90,14 @@ function get_chats()
                     const chats = document.getElementsByClassName("chat");
                     const chatSelected = e => {
                         selectedChatId = e.target.id;
+                        console.log('selectedChatId', selectedChatId)
                         document.querySelectorAll(".message").forEach(el => el.remove());
                         refreshMessages();
                     }
-
+                    if (selectedChatId != null)
+                        {
+                            refreshMessages();
+                        }
                     for (let chat of chats) {
                         chat.addEventListener("click", chatSelected);
                         }
@@ -102,9 +107,9 @@ function get_chats()
 
 
 }
+let selectedChatId = null;
 function ready()
     {
-        let selectedChatId = null;
         const b = document.querySelector('.button');
         b.addEventListener('click', sendButtonPressed);
         get_chats();
