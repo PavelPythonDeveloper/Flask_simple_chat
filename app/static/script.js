@@ -2,6 +2,8 @@ function responseSort(res) {
     let array = [];
     for (el in res)
         {
+            console.log('el', el);
+            res[el]['id'] = el;
             array.push(res[el]);
         }
     array.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
@@ -66,15 +68,17 @@ function get_chats()
 				{
 					document.querySelectorAll(".chat").forEach(el => el.remove());
 					let response = JSON.parse(request.response);
-					for (var key in response)
+					console.log(response);
+					response = responseSort(response);
+					console.log(response);
+                    for (let i = 0; i < response.length; i++)
 						{
 							let div = document.createElement('div');
 							div.className = "chat";
-							div.id = key;
-							let chatName = key;
-							let userName = response[key].users.username
-							let lastMessage = response[key].last_message
-							div.innerHTML = chatName + " " + userName + " " + lastMessage;
+							div.id = response[i].id;
+							let userName = response[i].users.username
+							let lastMessage = response[i].last_message
+							div.innerHTML = response[i].id + " " + userName + " " + lastMessage;
 							document.querySelector('#chat-holder').append(div);
 						}
 				}
@@ -104,7 +108,7 @@ function ready()
         const b = document.querySelector('.button');
         b.addEventListener('click', sendButtonPressed);
         get_chats();
-        let timerId = setInterval(() => get_chats(), 4000);
+        let timerId = setInterval(() => get_chats(), 3000);
     }
 
 document.addEventListener("DOMContentLoaded", ready);
