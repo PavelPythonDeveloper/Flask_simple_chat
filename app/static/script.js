@@ -1,3 +1,9 @@
+function clear(elementClass)
+    {
+        document.getElementById(elementClass).value = ''
+    }
+
+
 function responseSort(res) {
     let array = [];
     for (el in res)
@@ -6,13 +12,14 @@ function responseSort(res) {
             res[el]['id'] = el;
             array.push(res[el]);
         }
-    array.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+    array.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
     console.log(array);
     return array;
 }
 
 function refreshMessages()
 {
+    clear('send-message');
     document.querySelectorAll(".message").forEach(el => el.remove());
     let requestMessage = new XMLHttpRequest();
     var params = 'chat_Id=' + encodeURIComponent(selectedChatId);
@@ -21,7 +28,6 @@ function refreshMessages()
     requestMessage.onload = function()
         {
             let response = JSON.parse(requestMessage.response);
-            console.log(response);
             let responseArray = responseSort(response);
 
             for (let i = 0; i < responseArray.length; i++)
@@ -68,9 +74,7 @@ function get_chats()
 				{
 					document.querySelectorAll(".chat").forEach(el => el.remove());
 					let response = JSON.parse(request.response);
-					console.log(response);
 					response = responseSort(response);
-					console.log(response);
                     for (let i = 0; i < response.length; i++)
 						{
 							let div = document.createElement('div');
@@ -85,15 +89,11 @@ function get_chats()
                     const chats = document.getElementsByClassName("chat");
                     const chatSelected = e => {
                         selectedChatId = e.target.id;
-                        console.log(selectedChatId);
                         document.querySelectorAll(".message").forEach(el => el.remove());
-                        console.log(e.target.id);
-
                         refreshMessages();
                     }
 
                     for (let chat of chats) {
-                        console.log(chat.id);
                         chat.addEventListener("click", chatSelected);
                         }
 

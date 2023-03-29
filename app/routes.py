@@ -55,7 +55,7 @@ def get_chats():
         last_message = sorted(chat.messages, key=lambda x: x.timestamp)[-1]
         response.update({f"chat_{str(chat.id)}": {"users": {"username": username},
                                                   "last_message": last_message.body,
-                                                  "last_message_timestamp": last_message.timestamp}
+                                                  "timestamp": last_message.timestamp}
                          })
     print(response)
     return jsonify(response)
@@ -75,7 +75,7 @@ def get_chat_messages():
         response.update({f'message_{str(num)}': {'body': message.body,
                                                  'timestamp': message.timestamp,
                                                  'user': 'current_user' if message.author == current_user else 'recipient'}})
-    # print(response)
+    print(response)
     return jsonify(response)
 
 
