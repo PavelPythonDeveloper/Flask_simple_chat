@@ -1,9 +1,10 @@
 {% extends "base.html" %}
+
+{% block content %}
  <script>
         let currentUserId = {{ current_user.id }};
     </script>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
-{% block content %}
 <div>
     {% if current_user.is_authenticated %}
         <h1> Welcome to Simple Chat, {{ current_user.username }}!</h1>
