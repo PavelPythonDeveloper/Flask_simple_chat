@@ -94,7 +94,6 @@ def send_message():
                           chat_id=chat.id)
         db.session.add(message)
         chat.messages.append(message)
-
         db.session.commit()
     else:
         pass
