@@ -98,3 +98,8 @@ def send_message():
     else:
         pass
     return jsonify('200')
+
+
+@app.route('/profile')
+def profile():
+    return render_template('profile.html')
