@@ -103,5 +103,5 @@ def send_message():
 @app.route('/profile/<username>')
 def profile(username):
     user = User.query.filter_by(username=username).first_or_404()
-    image = r'/static/1.jpg'
+    image = user.avatar_path
     return render_template('profile.html', image=image, username=username)
