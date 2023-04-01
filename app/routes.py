@@ -105,3 +105,9 @@ def profile(username):
     user = User.query.filter_by(username=username).first_or_404()
     image = user.avatar_path
     return render_template('profile.html', image=image, username=username)
+
+
+@app.route('/users')
+def users():
+    all_users = User.query.all()
+    return render_template('users.html', users=all_users)
