@@ -40,6 +40,8 @@ class User(UserMixin, db.Model):
 
     chats = db.relationship('Chat', secondary=chat_user, backref='users')
 
+    avatar_path = db.Column(db.String, index=True, unique=True)
+
     def set_password(self, password):
         self.password_hash = generate_password_hash(password=password)
 
