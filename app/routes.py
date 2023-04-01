@@ -100,6 +100,8 @@ def send_message():
     return jsonify('200')
 
 
-@app.route('/profile')
-def profile():
-    return render_template('profile.html')
+@app.route('/profile/<username>')
+def profile(username):
+    user = User.query.filter_by(username=username).first_or_404()
+    image = r'/static/1.jpg'
+    return render_template('profile.html', image=image, username=username)
