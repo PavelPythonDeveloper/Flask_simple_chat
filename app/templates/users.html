@@ -1,12 +1,23 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
+<script src="{{ url_for('static', filename='userScript.js') }}"></script>
+<div class="message"></div>
     {% for user in users %}
-        <div class="user-image">
-            <img src="{{ user.avatar_path }}" style="width: 150px; height: 200px; object-fit: contain;">
-        </div>
+    <div class="user">
         <div class="user-description">
-            <h2>{{ user.username }}</h2>
+            <a href="{{ url_for('profile', username=user.username) }}"><h2>{{ user.username }}</h2></a>
         </div>
+        <div class="user-image">
+            {% if user.avatar_path %}
+                <img src="{{ user.avatar_path }}" style="width: 150px; height: 200px; object-fit: contain;">
+            {% else %}
+                <img src="/static/images/default.jpg" style="width: 150px; height: 200px; object-fit: contain;">
+            {% endif %}
+        </div>
+        <a href="#" class="message-link" id="{{ user.id }}">write message</a>
+    </div>
     {% endfor %}
+
 {% endblock %}

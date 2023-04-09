@@ -12,9 +12,10 @@ def logout():
 
 
 @app.route('/')
-@app.route('/index')
-def index():
-    return render_template('index.html')
+@app.route('/index/<username>')
+def index(username=None):
+    print(username)
+    return render_template('index.html', username=username)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -47,17 +48,23 @@ def register():
 
 @app.route('/_get_chats')
 def get_chats():
-    id = request.args.get('userId', 0, type=int)
-    user = User.query.filter_by(id=id).first()
+    user_name = request.args.get('userName', '', type=str)
+    user = User.query.filter_by(username=user_name).first()
     response = {}
     for chat in user.chats:
         username = [user.username for user in chat.users if user != current_user][0]
-        last_message = sorted(chat.messages, key=lambda x: x.timestamp)[-1]
+        last_messages = sorted(chat.messages, key=lambda x: x.timestamp)
+        if last_messages:
+            last_message_timestamp = last_messages[-1].timestamp
+            last_message_body = last_messages[-1].body
+        else:
+            last_message_timestamp = ''
+            last_message_body = ''
         response.update({f"chat_{str(chat.id)}": {"users": {"username": username},
-                                                  "last_message": last_message.body,
-                                                  "timestamp": last_message.timestamp}
+                                                  "last_message": last_message_body,
+                                                  "timestamp": last_message_timestamp,
+                                                  }
                          })
-    print(response)
     return jsonify(response)
 
 

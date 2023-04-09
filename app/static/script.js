@@ -3,6 +3,24 @@ function clear(elementClass)
         document.getElementById(elementClass).value = ''
     }
 
+function chatClickListener(){
+     const chats = document.getElementsByClassName("chat");
+                    const chatSelected = e => {
+                        selectedChatId = e.target.id;
+                        console.log('selectedChatId', selectedChatId)
+                        document.querySelectorAll(".message").forEach(el => el.remove());
+                        refreshMessages();
+                    }
+
+                    if (selectedChatId != null)
+                        {
+                            refreshMessages();
+                        }
+                    for (let chat of chats) {
+                        chat.addEventListener("click", chatSelected);
+                        }
+}
+
 
 function responseSort(res) {
     let array = [];
@@ -48,7 +66,6 @@ function setMessageCounter(count){
 
 function sendButtonPressed()
     {
-
         console.log('Button pressed!');
         body = document.getElementById('send-message').value
         let req = new XMLHttpRequest();
@@ -63,8 +80,9 @@ function sendButtonPressed()
 function get_chats()
 {
     let request = new XMLHttpRequest();
-    var params = 'userId=' + encodeURIComponent(currentUserId);
+    var params = 'userName=' + encodeURIComponent(currentUserName);
     request.open("GET", "/_get_chats?" + params, true);
+    console.log(params)
     request.send();
     request.onload = function()
 	{
@@ -75,6 +93,7 @@ function get_chats()
 				{
 					document.querySelectorAll(".chat").forEach(el => el.remove());
 					let response = JSON.parse(request.response);
+					console.log(response)
 					response = responseSort(response);
                     for (let i = 0; i < response.length; i++)
 						{
@@ -86,23 +105,11 @@ function get_chats()
 							div.innerHTML = response[i].id + " " + userName + " " + lastMessage;
 							document.querySelector('#chat-holder').append(div);
 						}
+//                    }
 				}
-                    const chats = document.getElementsByClassName("chat");
-                    const chatSelected = e => {
-                        selectedChatId = e.target.id;
-                        console.log('selectedChatId', selectedChatId)
-                        document.querySelectorAll(".message").forEach(el => el.remove());
-                        refreshMessages();
-                    }
-                    if (selectedChatId != null)
-                        {
-                            refreshMessages();
-                        }
-                    for (let chat of chats) {
-                        chat.addEventListener("click", chatSelected);
-                        }
 
-                setMessageCounter(6)
+                chatClickListener();
+                setMessageCounter(6);
     }
 
 
@@ -113,7 +120,7 @@ function ready()
         const b = document.querySelector('.button');
         b.addEventListener('click', sendButtonPressed);
         get_chats();
-        let timerId = setInterval(() => get_chats(), 3000);
+        let timerId = setInterval(() => get_chats(), 8000);
     }
 
 document.addEventListener("DOMContentLoaded", ready);

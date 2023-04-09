@@ -19,7 +19,7 @@
     <a href="{{ url_for('logout') }}" class="login-button">Logout</a>
     <a href="#" class="messages-button">Messages <span id="message-counter"></span></a>
     <a href="{{ url_for('profile', username=current_user.username) }}" class="profile-button">Profile</a>
-    <a href="{{ url_for('index') }}" class="chats-button">Chats</a>
+    <a href="{{ url_for('index', username=None) }}" class="chats-button">Chats</a>
     <a href="{{ url_for('users') }}" class="users-button">Users</a>
     {% endif %}
 </div>

@@ -2,7 +2,7 @@
 
 {% block content %}
  <script>
-        let currentUserId = {{ current_user.id }};
+        let currentUserName = '{{ current_user.username }}'
     </script>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 <div>
