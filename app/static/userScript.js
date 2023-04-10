@@ -1,15 +1,20 @@
 function sendMessage() {
-    alert('Message was send!')
+        console.log(document.querySelector('.text').className)
+        alert(document.querySelector('.text').value)
+
+
 }
 function func(a){
-    alert('alalalalalalla')
     let div = document.createElement('div')
     div.innerHTML = 'Enter Your Message!'
     let text = document.createElement('input')
+    text.className = 'text'
+
     let button = document.createElement('button')
     document.querySelector('.message').append(div)
     document.querySelector('.message').append(text)
     document.querySelector('.message').append(button)
+
     button.addEventListener('click', sendMessage)
 }
 

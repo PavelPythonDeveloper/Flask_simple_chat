@@ -60,7 +60,7 @@ def get_chats():
         else:
             last_message_timestamp = ''
             last_message_body = ''
-        response.update({f"chat_{str(chat.id)}": {"users": {"username": username},
+        response.update({f"{str(chat.id)}": {"users": {"username": username},
                                                   "last_message": last_message_body,
                                                   "timestamp": last_message_timestamp,
                                                   }
@@ -90,10 +90,7 @@ def get_chat_messages():
 def send_message():
     body = request.args.get('body', 0, type=str)
     chat_id = request.args.get('chat_Id', 0, type=str)
-    print(body)
-    print(chat_id)
-    chat = Chat.query.get(int(chat_id[-1]))
-    print('chat', chat)
+    chat = Chat.query.get(int(chat_id[-1]))  # если чатов будет больше 9, то ничего не сработает!!!
     if chat is not None:
         message = Message(sender_id=current_user.id,
                           recipient_id=chat.users[0].id if chat.users[0] != current_user else chat.users[1].id,
