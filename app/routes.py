@@ -60,10 +60,10 @@ def get_chats():
         else:
             last_message_timestamp = ''
             last_message_body = ''
-        response.update({f"{str(chat.id)}": {"users": {"username": username},
-                                                  "last_message": last_message_body,
-                                                  "timestamp": last_message_timestamp,
-                                                  }
+        response.update({str(chat.id): {"users": {"username": username},
+                                        "last_message": last_message_body,
+                                        "timestamp": last_message_timestamp,
+                                        }
                          })
     return jsonify(response)
 
@@ -73,9 +73,6 @@ def get_chat_messages():
     id = int(request.args.get("chat_Id", 0, type=str))
     chat = Chat.query.filter_by(id=id).first()
     messages = chat.messages
-    for message in messages:
-        # print(message)
-        pass
     response = {}
     for num, message in enumerate(messages):
         response.update({f'message_{str(num)}': {'body': message.body,
@@ -87,9 +84,9 @@ def get_chat_messages():
 
 @app.route('/send_message', methods=['POST'])
 def send_message():
-    body = request.args.get('body', 0, type=str)
-    chat_id = request.args.get('chat_Id', 0, type=str)
-    chat = Chat.query.get(int(chat_id[-1]))  # если чатов будет больше 9, то ничего не сработает!!!
+    body = request.args.get('body', '', type=str)
+    chat_id = request.args.get('chat_Id', None, type=str)
+    chat = Chat.query.get(int(chat_id)) if chat_id is not None else None
     if chat is not None:
         message = Message(sender_id=current_user.id,
                           recipient_id=chat.users[0].id if chat.users[0] != current_user else chat.users[1].id,
@@ -99,7 +96,25 @@ def send_message():
         chat.messages.append(message)
         db.session.commit()
     else:
-        pass
+        recipient_id = request.args.get('recipientId', None, type=str)
+        recipient = User.query.filter_by(id=int(recipient_id)).first()
+        for chat in recipient.chats:
+            if [recipient, current_user] == chat.users:
+                m = Message(sender_id=current_user.id, recipient_id=recipient.id, body=body)
+                db.session.add(m)
+                chat.messages.append(m)
+                db.session.commit()
+                break
+        else:
+            c = Chat()
+            db.session.add(c)
+            c.users.append(current_user)
+            c.users.append(recipient)
+            m = Message(sender_id=current_user.id, recipient_id=recipient.id, body=body)
+            db.session.add(m)
+            c.messages.append(m)
+            db.session.commit()
+
     return jsonify('200')
 
 

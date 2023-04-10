@@ -66,7 +66,6 @@ function setMessageCounter(count){
 
 function sendButtonPressed()
     {
-        console.log('Button pressed!');
         body = document.getElementById('send-message').value
         let req = new XMLHttpRequest();
         var params = 'body=' + encodeURIComponent(body) + '&' + 'chat_Id=' + encodeURIComponent(selectedChatId);
