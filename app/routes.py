@@ -70,8 +70,7 @@ def get_chats():
 
 @app.route('/_get_chat_messages')
 def get_chat_messages():
-    id = request.args.get("chat_Id", 0, type=str)
-    id = int(id[-1])
+    id = int(request.args.get("chat_Id", 0, type=str))
     chat = Chat.query.filter_by(id=id).first()
     messages = chat.messages
     for message in messages:
