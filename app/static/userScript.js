@@ -1,7 +1,10 @@
-function sendMessage() {
-        console.log(document.querySelector('.text').className)
-        alert(document.querySelector('.text').value)
-
+function sendMessage(recipientId) {
+        body = document.querySelector('.text').value
+        let req = new XMLHttpRequest();
+        var params = 'body=' + encodeURIComponent(body) + '&' + 'recipientId=' + encodeURIComponent(recipientId);
+        req.open("POST", "/send_message?" + params, true);
+        req.send();
+        req.onload = alert('Message sent!');
 
 }
 function func(a){
@@ -15,7 +18,7 @@ function func(a){
     document.querySelector('.message').append(text)
     document.querySelector('.message').append(button)
 
-    button.addEventListener('click', sendMessage)
+    button.addEventListener('click', sendMessage.bind(null, a))
 }
 
 function ready()
@@ -25,16 +28,6 @@ function ready()
     for (let user of users)
     {
         user.addEventListener('click', func.bind(null, user.id))
-
-//        let div = document.createElement('input');
-//        div.className = 'accc';
-//        //div.className = "chat";2
-//        div.id = '1'
-//
-//
-//        div.innerHTML = 'llkjlkjlkjlkjlkjlkjlkjkljlkj'
-//        //    console.log(user);
-//            user.append(div);
     }
 }
 document.addEventListener("DOMContentLoaded", ready);
